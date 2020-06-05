@@ -1,5 +1,6 @@
 package br.com.casadocodigo.loja.conf;
 
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.cache.CacheManager;
@@ -13,6 +14,8 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -37,6 +40,23 @@ import br.com.casadocodigo.loja.models.CarrinhoCompras;
 @EnableCaching
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 
+	@Bean
+	public MailSender mailSender(){
+	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+	    mailSender.setHost("smtp.gmail.com");
+	    mailSender.setUsername("alura.springmvc@gmail.com");
+	    mailSender.setPassword("alura2015");
+	    mailSender.setPort(587);
+
+	    Properties mailProperties = new Properties();
+	    mailProperties.put("mail.smtp.auth", true);
+	    mailProperties.put("mail.smtp.starttls.enable", true);
+
+	    mailSender.setJavaMailProperties(mailProperties);
+	    return mailSender;
+	}
+	
 	@Bean
     public RestTemplate restTemplate(){
         return new RestTemplate();
